@@ -2,7 +2,7 @@
 
 A small, fictional travel app with original bundled illustrations, saved places, and a live Assetlib connection. It starts without an account or network access. No booking or purchase flow is included.
 
-The app uses the public [AssetLib Swift SDK](https://github.com/AssetLib/sdk-swift), pinned to **0.2.0-preview.1**. iOS 17+ and Xcode 16+ with Swift 6 are required.
+The app uses the public [AssetLib Swift SDK](https://github.com/AssetLib/sdk-swift), pinned to **0.2.1-preview.1**. iOS 17+ and Xcode 16+ with Swift 6 are required.
 
 ## Run
 
@@ -42,6 +42,8 @@ session.artwork.travel.coast
 No proprietary layout wrapper is required. The observable SDK store supplies verified pixels; SwiftUI controls rendering, accessibility, composition, and interaction. Read the accessor in a SwiftUI body: holding an `Image` elsewhere does not create a live subscription. Refresh work is explicit and independent of rendering.
 
 The demo explicitly requests pixels for its known card/detail layouts multiplied by SwiftUI's display scale. The small garden illustration requests its own smaller target. Display-width changes update those requests; ordinary `Image` modifiers remain normal SwiftUI code. The SDK chooses a compatible PNG or WebP rendition, verifies its exact dimensions and hash, and keeps legacy WebP as fallback. SVG source artwork uses prepared raster renditions on iOS; runtime vector rendering is not implemented.
+
+The card image belongs to a button labeled with its action; its image is hidden from accessibility. The detail view reads a paired artwork snapshot using the current SwiftUI locale and exposes its localized description as an image. If a remote image has no description, that informative usage keeps its described bundled illustration. The small garden illustration remains decorative. Bundled descriptions are kept in the catalog; published descriptions stay with the matching release through cache and rollback.
 
 `assetlib.catalog.json` and `Sources/Artwork.generated.swift` are checked in. To regenerate offline:
 
