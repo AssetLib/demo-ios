@@ -1,0 +1,15 @@
+{
+  "originHash" : "5ba68fc3f136916ad6f4418a1f2e673294458e32e158aedf394516f2af53d09a",
+  "pins" : [
+    {
+      "identity" : "sdk-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AssetLib/sdk-swift.git",
+      "state" : {
+        "revision" : "520ab21a5fe7c732558834428ff8d1d2f57385f0",
+        "version" : "0.1.0-preview.2"
+      }
+    }
+  ],
+  "version" : 3
+}

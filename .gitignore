@@ -1,0 +1,14 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+output/
+LocalBuild/
+project.local.json
+xcuserdata/
+*.xcuserstate
+.env*
+*.private.*
+__pycache__/
+*.py[cod]
+!Elsewhere.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved

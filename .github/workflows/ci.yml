@@ -1,0 +1,24 @@
+name: SwiftUI demo
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Verify generated accessors
+        run: |
+          python3 scripts/generate-catalog.py assetlib.catalog.json /tmp/Artwork.generated.swift
+          diff -u Sources/Artwork.generated.swift /tmp/Artwork.generated.swift
+      - run: npm install --global xcodebuildmcp@2.5.2
+      - name: Build public SDK dependency for iOS Simulator
+        run: >-
+          xcodebuildmcp device build
+          --project-path "$PWD/Elsewhere.xcodeproj"
+          --scheme Elsewhere
+          --configuration Debug
+          --derived-data-path "$RUNNER_TEMP/ElsewhereDerivedData"
+          --json '{"extraArgs":["-destination","generic/platform=iOS Simulator","CODE_SIGNING_ALLOWED=NO"]}'
