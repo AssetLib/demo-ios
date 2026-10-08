@@ -42,3 +42,11 @@ A separate read-only hosted acceptance run accepted signed release 3 from the ex
 The build machine had no installed iOS Simulator runtime available for launch. The SwiftUI application was therefore **not launched on an iPhone simulator or physical device**. Its visual layout, VoiceOver behavior, saved-place interactions, connection sheet, and an end-to-end publish/rollback while the native screen remains open still require runtime verification. A generic Simulator compile is not a simulator run.
 
 The GitHub Actions workflow is prepared to build the public dependency; its remote run status should be checked after publishing the repository. No App Store submission, signing, or TestFlight distribution was performed.
+
+## Rendition extension candidate — 0.2.0-preview.1
+
+The updated app compiled against the ignored local SDK override using XcodeBuildMCP with both generic iOS and generic iOS Simulator destinations. The build succeeded without Swift compiler errors. Xcode emitted its expected AppIntents metadata-skipped warning because this demo has no AppIntents dependency. The public project is prepared to use exact version `0.2.0-preview.1`; its resolved revision must be refreshed after that coordinated tag is published. The older public-resolution evidence above remains historical evidence for `0.1.0-preview.2`.
+
+The updated SDK passed 17 executed tests on macOS, including all 65 shared signed-manifest cases, four shared target selections, native PNG/WebP decoding, exact dimensions/type/hash verification, target propagation, legacy cache migration, candidate failure and historical cache-only fallback. One optional hosted acceptance test was disabled. Two code-generation tests and a release build passed.
+
+The demo supplies known frame dimensions multiplied by SwiftUI display scale, requests a smaller target for the garden illustration, and displays actual delivered format and pixel dimensions on travel cards. Native SVG remains unsupported: SVG sources use server-prepared PNG/WebP renditions. No native interactive UI or live PNG publication is claimed by these compile checks.

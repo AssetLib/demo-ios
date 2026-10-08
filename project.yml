@@ -10,7 +10,7 @@ settings:
 packages:
   AssetLib:
     url: https://github.com/AssetLib/sdk-swift.git
-    exactVersion: 0.1.0-preview.2
+    exactVersion: 0.2.0-preview.1
 targets:
   Elsewhere:
     type: application

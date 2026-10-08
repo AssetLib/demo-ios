@@ -2,7 +2,7 @@
 
 A small, fictional travel app with original bundled illustrations, saved places, and a live Assetlib connection. It starts without an account or network access. No booking or purchase flow is included.
 
-The app uses the public [AssetLib Swift SDK](https://github.com/AssetLib/sdk-swift), pinned to **0.1.0-preview.2**. iOS 17+ and Xcode 16+ with Swift 6 are required.
+The app uses the public [AssetLib Swift SDK](https://github.com/AssetLib/sdk-swift), pinned to **0.2.0-preview.1**. iOS 17+ and Xcode 16+ with Swift 6 are required.
 
 ## Run
 
@@ -25,7 +25,7 @@ The committed Xcode project is ready to open. XcodeGen is only necessary if you 
 5. Roll back in the console. Check again; the SDK accepts the new release sequence that points to the earlier artwork.
 6. Close and reopen the app offline. Previously verified artwork comes from this device's cache. A new installation starts from the bundled illustrations.
 
-Each card shows whether its image is bundled, cached, or from a workspace release. Disconnecting restores bundled artwork immediately and removes the saved public configuration, while retaining verified cache and release history for safe reconnection. Saved destinations stay on your device.
+Each card shows whether its image is bundled, cached, or from a workspace release, plus the actual delivered PNG/WebP format and pixel dimensions when available. Disconnecting restores bundled artwork immediately and removes the saved public configuration, while retaining verified cache and release history for safe reconnection. Saved destinations stay on your device.
 
 ## Native images; your layout
 
@@ -40,6 +40,8 @@ session.artwork.travel.coast
 ```
 
 No proprietary layout wrapper is required. The observable SDK store supplies verified pixels; SwiftUI controls rendering, accessibility, composition, and interaction. Read the accessor in a SwiftUI body: holding an `Image` elsewhere does not create a live subscription. Refresh work is explicit and independent of rendering.
+
+The demo explicitly requests pixels for its known card/detail layouts multiplied by SwiftUI's display scale. The small garden illustration requests its own smaller target. Display-width changes update those requests; ordinary `Image` modifiers remain normal SwiftUI code. The SDK chooses a compatible PNG or WebP rendition, verifies its exact dimensions and hash, and keeps legacy WebP as fallback. SVG source artwork uses prepared raster renditions on iOS; runtime vector rendering is not implemented.
 
 `assetlib.catalog.json` and `Sources/Artwork.generated.swift` are checked in. To regenerate offline:
 
@@ -63,7 +65,7 @@ This creates an ignored local project. It leaves the committed project and its e
 xcodegen generate
 ```
 
-CI builds the committed public dependency for a generic iOS Simulator destination. A compile pass does not prove runtime behavior. Core signed-manifest, native WebP decode, corruption, cache, rollback, and offline tests live in the SDK repository. An installed simulator or device is needed to validate the actual SwiftUI screen, VoiceOver, and interactions.
+CI builds the committed public dependency for a generic iOS Simulator destination. A compile pass does not prove runtime behavior. Core signed-manifest, native PNG/WebP decode, deterministic target selection, corruption, cache, rollback, and offline tests live in the SDK repository. An installed simulator or device is needed to validate the actual SwiftUI screen, VoiceOver, and interactions.
 
 ## Boundaries
 

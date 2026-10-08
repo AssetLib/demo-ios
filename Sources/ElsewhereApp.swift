@@ -21,6 +21,7 @@ import AssetLib
     var showSaved = false
     var saved: Set<String> = []
     @ObservationIgnored private var didRestore = false
+    @ObservationIgnored private var targetPixels: [AssetReference: AssetPixelSize] = [:]
     @ObservationIgnored private let defaults = UserDefaults.standard
     var artwork: AppArtwork { AppArtwork(store: images) }
     var visibleTrips: [Trip] { showSaved ? Trip.all.filter { saved.contains($0.id) } : Trip.all }
@@ -54,15 +55,32 @@ import AssetLib
         defaults.removeObject(forKey: "assetlib-public-configuration")
         configText = ""; connectionError = nil
     }
-    func refresh() async { await images.refresh(AssetCatalog.all) }
+    func refresh() async { await images.refresh(AssetCatalog.all, targetPixels: targetPixels) }
+    func setDisplay(containerWidth: CGFloat, scale: CGFloat) async {
+        guard containerWidth.isFinite, scale.isFinite, containerWidth > 0, scale > 0 else { return }
+        // The largest travel image is a 240pt-tall card or the capped detail image.
+        // Explicit layout demand stays in the app; normal Image modifiers remain untouched.
+        let travelWidth = min(8192, Int(ceil(max(320, min(containerWidth, 680) - 40) * scale)))
+        let gardenWidth = min(8192, Int(ceil(80 * scale)))
+        let next = [
+            AssetCatalog.Travel.coast: AssetPixelSize(width: travelWidth, height: max(1, Int(ceil(Double(travelWidth) * 0.75)))),
+            AssetCatalog.Travel.ridge: AssetPixelSize(width: travelWidth, height: max(1, Int(ceil(Double(travelWidth) * 0.75)))),
+            AssetCatalog.Tasks.garden: AssetPixelSize(width: gardenWidth, height: max(1, Int(ceil(Double(gardenWidth) * 2 / 3))))
+        ]
+        guard next != targetPixels else { return }
+        targetPixels = next
+        if images.connected { await refresh() }
+    }
     func image(for trip: Trip) -> Image { trip.id == "coast" ? artwork.travel.coast : artwork.travel.ridge }
     func status(for trip: Trip) -> String {
         let ref = trip.id == "coast" ? AssetCatalog.Travel.coast : AssetCatalog.Travel.ridge
         guard let status = images.results[ref] else { return "Bundled artwork" }
+        let format = status.mime == "image/png" ? "PNG" : "WebP"
+        let rendition = status.pixelSize.map { " · \(format) \($0.width)×\($0.height)" } ?? ""
         switch status.source {
         case .bundle: return "Bundled artwork"
-        case .cache: return "On this device · release \(status.sequence ?? 0)"
-        case .remote: return "From your workspace · release \(status.sequence ?? 0)"
+        case .cache: return "On this device · release \(status.sequence ?? 0)\(rendition)"
+        case .remote: return "From your workspace · release \(status.sequence ?? 0)\(rendition)"
         }
     }
 }
@@ -81,6 +99,7 @@ struct Trip: Identifiable, Hashable {
 
 struct TravelHome: View {
     @Bindable var session: DemoSession
+    @Environment(\.displayScale) private var displayScale
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -151,6 +170,13 @@ struct TravelHome: View {
             .sheet(isPresented: $session.showingConnection) { ConnectionSheet(session: session) }
             .sheet(item: $session.selection) { trip in TripDetail(trip: trip, session: session) }
         }.tint(.primary)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear.task(id: proxy.size.width * displayScale) {
+                        await session.setDisplay(containerWidth: proxy.size.width, scale: displayScale)
+                    }
+                }
+            }
     }
 }
 
@@ -217,6 +243,7 @@ struct ConnectionSheet: View {
                 Section("Try the full loop") {
                     Text("In the console, change the image bound to travel.coast and publish. Check for updates here. Then roll back in the console and check again. Artwork changes; the app's layout stays yours.")
                     Text("The app uses normal SwiftUI Image values. Network loading, verification, caching, and release history live in the SDK.").font(.footnote).foregroundStyle(.secondary)
+                    Text("The demo requests physical pixels for its layout and display scale. PNG and WebP renditions decode to native images; SVG artwork uses a prepared raster fallback on iOS.").font(.footnote).foregroundStyle(.secondary)
                 }
             }.navigationTitle("Assetlib").navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
