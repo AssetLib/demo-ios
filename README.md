@@ -2,7 +2,7 @@
 
 A small, fictional travel app with original bundled illustrations, saved places, and a live Assetlib connection. It starts without an account or network access. No booking or purchase flow is included.
 
-The app uses the public [Assetlib Swift SDK](https://github.com/AssetLib/sdk-swift) (Swift module `AssetLib`), pinned to **0.2.1-preview.1**. iOS 17+ and Xcode 16+ with Swift 6 are required.
+The app uses the public [Assetlib Swift SDK](https://github.com/AssetLib/sdk-swift) (Swift module `AssetLib`), pinned to **0.3.0-preview.1**. iOS 17+ and Xcode 16+ with Swift 6 are required.
 
 ## Run
 

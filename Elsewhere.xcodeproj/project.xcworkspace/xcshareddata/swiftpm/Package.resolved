@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AssetLib/sdk-swift.git",
       "state" : {
-        "revision" : "2477bc2b88c36ef72cc088ab68e5a4148f5b9bc7",
-        "version" : "0.2.1-preview.1"
+        "revision" : "d9e6c658ecbdcb926e4948377d8e07e927c8a718",
+        "version" : "0.3.0-preview.1"
       }
     }
   ],

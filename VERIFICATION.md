@@ -70,3 +70,19 @@ The committed public dependency now resolves `0.2.1-preview.1`, revision `2477bc
 The travel-card image is decorative inside an explicitly labeled action button. The detail view uses the current locale and a paired artwork snapshot, marks it as an image, and requires a description before displaying remote artwork; otherwise it retains the described bundled illustration. Its status reflects that displayed fallback. The small garden remains decorative. Bundled English/Thai descriptions were checked against the included illustrations.
 
 The released SDK separately passed native macOS accessibility-tree checks for image role, locale changes, verified cached/offline pixels, bundle restoration, decorative hiding, and button labels. That evidence does not establish iPhone runtime or VoiceOver listening acceptance. This machine has no usable iOS Simulator runtime; generic compilation remains the iOS check.
+
+## SDK 0.3.0-preview.1 — October 9, 2026 (ET)
+
+The committed project now pins `https://github.com/AssetLib/sdk-swift.git` at exact version `0.3.0-preview.1` in `project.yml` (and the regenerated `Elsewhere.xcodeproj`) and in `scripts/use-local-sdk.py`. `xcodebuild -resolvePackageDependencies` with an empty cloned-packages directory resolved revision `d9e6c658ecbdcb926e4948377d8e07e927c8a718`, the commit behind the public `0.3.0-preview.1` tag, and `Package.resolved` records it.
+
+The release only adds API: a `staging` environment, appearance and arm variant cells, an optional `decide` callback, a pinned key set, and appearance and arm overrides on `AssetImageStore`, all with defaults. The demo uses none of them and needed no code change for the upgrade. The storage namespace now derives from the manifest origin, organization, app, and environment, and the SDK migrates the previous cache and release watermark once after verifying them.
+
+The connection sheet's **Create or open a workspace** link and the README now point to `https://console.assetlib.dev`. The demo does not check the configuration's host: `AssetConfiguration.parse` requires an HTTPS manifest URL scoped to the app on any host. A scratch macOS executable built against the resolved `0.3.0-preview.1` checkout parsed a configuration in the shape the 0.2.1 SDK saved, then parsed it again after re-encoding, for both `assetlib-console.vercel.app` and `console.assetlib.dev` and for both the legacy and the environment manifest paths. The app and SDK therefore still accept saved configurations that point at the legacy host; no network request to either host was made in this check.
+
+Checks run, with Xcode 27.0, XcodeGen 2.45.4 and XcodeBuildMCP 2.5.2:
+
+1. `xcodegen generate` changed only the package requirement in `project.pbxproj`.
+2. The generated accessors match a fresh offline `generate-catalog.py` run (empty diff).
+3. The CI build command with a new `output/Public030DerivedData` directory fetched the public package and succeeded for the generic iOS Simulator destination, with signing disabled. It produced `Debug-iphonesimulator/Elsewhere.app` and `Debug-iphoneos/Elsewhere.app`. The only warnings were Xcode's AppIntents metadata-skipped notices.
+
+Not verified: `xcrun simctl list runtimes` lists no installed iOS Simulator runtime on this machine, so the app was not launched, and VoiceOver, the connection sheet, the console link and a live publish and rollback were not exercised on iOS. A generic Simulator compile is not a simulator run.
