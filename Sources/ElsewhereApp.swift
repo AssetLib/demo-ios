@@ -231,7 +231,7 @@ struct ConnectionSheet: View {
                 Section {
                     Text("Put your own artwork in this app.").font(.title2.weight(.semibold)).fontDesign(.serif)
                     Text("Create an Assetlib workspace, copy its public SDK configuration, and paste it below. The demo already includes the three starter placements.")
-                    Link("Create or open a workspace", destination: URL(string: "https://assetlib-console.vercel.app")!)
+                    Link("Create or open a workspace", destination: URL(string: "https://console.assetlib.dev")!)
                 }
                 Section("Public SDK configuration") {
                     TextEditor(text: $session.configText).font(.system(.caption, design: .monospaced)).frame(minHeight: 180)
