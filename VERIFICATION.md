@@ -41,7 +41,9 @@ A separate read-only hosted acceptance run accepted signed release 3 from the ex
 
 The build machine had no installed iOS Simulator runtime available for launch. The SwiftUI application was therefore **not launched on an iPhone simulator or physical device**. Its visual layout, VoiceOver behavior, saved-place interactions, connection sheet, and an end-to-end publish/rollback while the native screen remains open still require runtime verification. A generic Simulator compile is not a simulator run.
 
-The GitHub Actions workflow is prepared to build the public dependency; its remote run status should be checked after publishing the repository. No App Store submission, signing, or TestFlight distribution was performed.
+No App Store submission, signing, or TestFlight distribution was performed.
+
+GitHub Actions status, checked October 9, 2026 with `gh run list -R AssetLib/demo-ios`: the `SwiftUI demo` workflow (macos-15: accessor drift check, then the generic iOS Simulator build against the public package) passed for this first commit, `e3e60e7` on `main`, in run 37719325030 on October 7, 2026 at 22:44 ET. It also passed for `b300e1e` on `main` (run 37724116585) and for `9a1f7b4` on `codex/accessibility-release` (push run 37729848239 and pull request run 37729938700).
 
 ## Rendition extension — 0.2.0-preview.1
 
