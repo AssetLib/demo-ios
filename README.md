@@ -2,7 +2,7 @@
 
 A small, fictional travel app with original bundled illustrations, saved places, and a live Assetlib connection. It starts without an account or network access. No booking or purchase flow is included.
 
-The app uses the public [AssetLib Swift SDK](https://github.com/AssetLib/sdk-swift), pinned to **0.2.1-preview.1**. iOS 17+ and Xcode 16+ with Swift 6 are required.
+The app uses the public [Assetlib Swift SDK](https://github.com/AssetLib/sdk-swift) (Swift module `AssetLib`), pinned to **0.3.0-preview.1**. iOS 17+ and Xcode 16+ with Swift 6 are required.
 
 ## Run
 
@@ -18,7 +18,7 @@ The committed Xcode project is ready to open. XcodeGen is only necessary if you 
 
 ## Try your own workspace
 
-1. Open the connection button in the top-right corner, then **Create or open a workspace**. Sign in at [assetlib-console.vercel.app](https://assetlib-console.vercel.app).
+1. Open the connection button in the top-right corner, then **Create or open a workspace**. Sign in at [console.assetlib.dev](https://console.assetlib.dev).
 2. Copy your workspace's **public SDK configuration**. Paste the JSON into the demo and choose **Use this workspace**. It contains no editor token or private signing key.
 3. The starter workspace provides `travel.coast`, `travel.ridge`, and `tasks.garden`. Both travel placements are 1200×900; the garden is 600×400.
 4. Change the image bound to `travel.coast` in the console and publish. Choose **Check for updates**, or pull to refresh, in the running demo.
