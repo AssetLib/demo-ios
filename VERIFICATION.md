@@ -60,3 +60,11 @@ xcodebuildmcp device build \
   --derived-data-path "$PWD/output/PublicRenditionDerivedData" \
   --json '{"extraArgs":["-destination","generic/platform=iOS Simulator","CODE_SIGNING_ALLOWED=NO"]}'
 ```
+
+## Accessibility preview — 0.2.1-preview.1
+
+The committed public dependency now resolves `0.2.1-preview.1`, revision `2477bc2b88c36ef72cc088ab68e5a4148f5b9bc7`, from the public Swift SDK repository. A fresh `output/PublicAccessibilityDerivedData` source-control checkout resolved that exact public revision and passed generic iOS and generic iOS Simulator builds through XcodeBuildMCP with signing disabled. Generated accessors match a fresh offline code-generation run.
+
+The travel-card image is decorative inside an explicitly labeled action button. The detail view uses the current locale and a paired artwork snapshot, marks it as an image, and requires a description before displaying remote artwork; otherwise it retains the described bundled illustration. Its status reflects that displayed fallback. The small garden remains decorative. Bundled English/Thai descriptions were checked against the included illustrations.
+
+The released SDK separately passed native macOS accessibility-tree checks for image role, locale changes, verified cached/offline pixels, bundle restoration, decorative hiding, and button labels. That evidence does not establish iPhone runtime or VoiceOver listening acceptance. This machine has no usable iOS Simulator runtime; generic compilation remains the iOS check.

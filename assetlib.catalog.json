@@ -1,8 +1,49 @@
 {
   "schemaVersion": 1,
   "placements": [
-    {"key":"travel.coast","symbol":["Travel","coast"],"width":1200,"height":900,"fallbackImageName":"coast"},
-    {"key":"travel.ridge","symbol":["Travel","ridge"],"width":1200,"height":900,"fallbackImageName":"ridge"},
-    {"key":"tasks.garden","symbol":["Tasks","garden"],"width":600,"height":400,"fallbackImageName":"garden"}
+    {
+      "key": "travel.coast",
+      "symbol": [
+        "Travel",
+        "coast"
+      ],
+      "width": 1200,
+      "height": 900,
+      "fallbackImageName": "coast",
+      "bundledAccessibility": {
+        "defaultLocale": "en",
+        "descriptions": {
+          "en": "An illustrated seaside house, a sailboat, and the sun over the water.",
+          "th": "ภาพวาดบ้านริมทะเล เรือใบ และดวงอาทิตย์เหนือผืนน้ำ"
+        }
+      }
+    },
+    {
+      "key": "travel.ridge",
+      "symbol": [
+        "Travel",
+        "ridge"
+      ],
+      "width": 1200,
+      "height": 900,
+      "fallbackImageName": "ridge",
+      "bundledAccessibility": {
+        "defaultLocale": "en",
+        "descriptions": {
+          "en": "An illustrated mountain cabin beside a winding trail and pine trees.",
+          "th": "ภาพวาดกระท่อมบนภูเขาข้างทางเดินคดเคี้ยวและต้นสน"
+        }
+      }
+    },
+    {
+      "key": "tasks.garden",
+      "symbol": [
+        "Tasks",
+        "garden"
+      ],
+      "width": 600,
+      "height": 400,
+      "fallbackImageName": "garden"
+    }
   ]
 }

@@ -72,6 +72,10 @@ import AssetLib
         if images.connected { await refresh() }
     }
     func image(for trip: Trip) -> Image { trip.id == "coast" ? artwork.travel.coast : artwork.travel.ridge }
+    func describedArtwork(for trip: Trip, locale: Locale) -> AssetArtwork {
+        trip.id == "coast" ? artwork.travel.coastArtwork(locale: locale, requireDescription: true)
+            : artwork.travel.ridgeArtwork(locale: locale, requireDescription: true)
+    }
     func status(for trip: Trip) -> String {
         let ref = trip.id == "coast" ? AssetCatalog.Travel.coast : AssetCatalog.Travel.ridge
         guard let status = images.results[ref] else { return "Bundled artwork" }
@@ -121,8 +125,8 @@ struct TravelHome: View {
                             Button { session.selection = trip } label: {
                                 session.image(for: trip)
                                     .resizable().scaledToFill().frame(height: 240).clipped()
-                                    .accessibilityLabel(trip.name)
-                            }.buttonStyle(.plain)
+                                    .accessibilityHidden(true)
+                            }.buttonStyle(.plain).accessibilityLabel("View \(trip.name)")
                             VStack(alignment: .leading, spacing: 12) {
                                 Text(trip.location).font(.caption2.weight(.semibold)).tracking(1.4).foregroundStyle(.secondary)
                                 HStack(alignment: .top) {
@@ -194,17 +198,23 @@ struct TripDetail: View {
     let trip: Trip
     @Bindable var session: DemoSession
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
     var body: some View {
+        let artwork = session.describedArtwork(for: trip, locale: locale)
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    session.image(for: trip).resizable().scaledToFit().clipShape(RoundedRectangle(cornerRadius: 24)).accessibilityLabel(trip.name)
+                    artwork.image.resizable().scaledToFit().clipShape(RoundedRectangle(cornerRadius: 24))
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityAddTraits(.isImage)
+                        .accessibilityLabel(Text(verbatim: artwork.accessibilityDescription ?? ""))
+                        .accessibilityHidden(artwork.accessibilityDescription == nil)
                     Text(trip.location).font(.caption.weight(.semibold)).tracking(1.4).foregroundStyle(.secondary)
                     Text(trip.name).font(.largeTitle.weight(.semibold)).fontDesign(.serif)
                     Text(trip.description).font(.title3).foregroundStyle(.secondary)
                     ForEach(trip.details, id: \.self) { Label($0, systemImage: "checkmark").font(.body) }
                     HStack { Text("Keep it for later").font(.headline); Spacer(); SaveButton(trip: trip, session: session) }
-                    Text(session.status(for: trip)).font(.caption).foregroundStyle(.secondary)
+                    Text(artwork.source == .bundle ? "Bundled artwork" : session.status(for: trip)).font(.caption).foregroundStyle(.secondary)
                 }.padding(24).frame(maxWidth: 680).frame(maxWidth: .infinity)
             }.navigationTitle("A place to pause").navigationBarTitleDisplayMode(.inline)
                 .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
