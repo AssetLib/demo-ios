@@ -1,3 +1,15 @@
+# Simulator run — October 9, 2026 (ET)
+
+First interactive run of the app on an iOS simulator, with the committed public project on Swift SDK `0.3.0-preview.1` (`main` at `2ef91d8`).
+
+- `xcodebuild -project Elsewhere.xcodeproj -scheme Elsewhere -destination 'platform=iOS Simulator,…' CODE_SIGNING_ALLOWED=NO build` succeeded with Xcode 27.0 and the iOS 27.0 simulator runtime.
+- On a freshly booted iPhone 17 simulator (iOS 27.0), the app launched and rendered its bundled artwork ("Bundled artwork" under each card).
+- With the hosted demo workspace's public configuration in the console's current shape (single pin plus `pinnedPublicKeys` and `keyIds`, manifest on the legacy delivery host `assetlib-console.vercel.app`) stored under the app's `assetlib-public-configuration` default, the relaunched app verified signed release 6 and rendered the coast card from it: "From your workspace · release 6 · WebP 1200×900". The connection sheet showed "Accepted release 6".
+- Disconnect cleared the connection and the configuration text and returned the cards to bundled artwork.
+- The configuration was pasted through the sheet's editor twice; storing it by tapping "Use this workspace" was not completed in this run because taps sent while the form was still scrolling only stopped the scroll. Buttons in the same sheet responded once the scroll had settled. The stored-default path is the same string the button saves.
+
+Not established: a hosted publish, refresh and rollback loop on the simulator, offline restart in the app, VoiceOver, or a physical device.
+
 # Verification — October 7, 2026 (ET)
 
 This record distinguishes compilation, SDK execution on macOS, and native app UI execution.
