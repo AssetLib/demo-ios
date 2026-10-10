@@ -1,3 +1,18 @@
+# Local-console end-to-end run — October 9, 2026 (ET)
+
+The workspace's `e2e/` harness (`node e2e/run.mjs`, harness commit `ee93fb8`) ran the golden path against the local console at `http://127.0.0.1:3100` on an iPhone 18 Pro simulator (iOS 27.0, Xcode 27.0), from 20:06 to 20:10 ET (run `20261010T000638Z`). The app was the unsigned Debug simulator build of `7e36eb3` on the pinned Swift SDK `0.3.0-preview.1`; no change to this repository was needed. Maestro 2.11.0 drove the UI; each result below was read by the harness from the UI hierarchy and a screenshot. The report is `e2e/output/20261010T000638Z/report.html` in the workspace (local, not committed).
+
+The SDK accepts only HTTPS and the local console serves HTTP, so the harness served the console through an HTTPS front on `127.0.0.1:3443` and added its local test CA to the Simulator keychain with `xcrun simctl keychain … add-root-cert`.
+
+- `assetlib sync` registered an iOS build (`0.1.0`, build 1) from a temporary copy of `assetlib.catalog.json` with a screen per placement (`travel.coast` on `Explore`); the committed catalog is unchanged.
+- The public configuration was put on the Simulator pasteboard and pasted through the editor's edit menu (keyboard typing can turn straight quotes into smart quotes). After hiding the keyboard and scrolling to it, **Use this workspace** saved the connection, which completes the step the run above left open; the coast card showed "From your workspace · release 28 · WebP 1200×900".
+- A new 1200 × 900 image was bound to `travel.coast` and published. **Check for updates** in the connection sheet reached "Accepted release, 29", the card showed "From your workspace · release 29 · WebP 1200×900", and the replacement's colour covered 46% of the coast image band.
+- Production was rolled back to publication 28 as publication 30. **Check for updates** showed "On this device · release 30 · WebP 1200×900" (the restored bytes were already cached) with the original coast artwork and none of the replacement colour.
+- With the HTTPS front stopped, so the delivery origin was unreachable, the app was terminated and relaunched and showed "On this device · release 30 · WebP 1200×900". The Simulator shares the Mac's network, so the device's own networking stayed on.
+- Observations: none. SDK `0.3.0-preview.1` sends no observations, and the console reported zero counts for this build.
+
+Not established: VoiceOver, a physical device, the device's own networking turned off, or this loop against the hosted console. A simulator run is not a device run.
+
 # Simulator run — October 9, 2026 (ET)
 
 First interactive run of the app on an iOS simulator, with the committed public project on Swift SDK `0.3.0-preview.1` (`main` at `2ef91d8`).
