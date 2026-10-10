@@ -11,7 +11,7 @@ if not (sdk / "Package.swift").is_file():
 build = root / "LocalBuild"
 build.mkdir(exist_ok=True)
 spec = (root / "project.yml").read_text()
-remote = "    url: https://github.com/AssetLib/sdk-swift.git\n    exactVersion: 0.3.0-preview.1"
+remote = "    url: https://github.com/AssetLib/sdk-swift.git\n    exactVersion: 0.4.0-preview.1"
 if remote not in spec:
     raise SystemExit("Expected remote SDK declaration was not found")
 spec = spec.replace(remote, "    path: " + str(sdk))
