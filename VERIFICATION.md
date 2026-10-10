@@ -1,3 +1,25 @@
+# SDK 0.4.0-preview.1 — October 10, 2026 (ET)
+
+The committed project now pins `https://github.com/AssetLib/sdk-swift.git` at exact version `0.4.0-preview.1` in `project.yml` (and the regenerated `Elsewhere.xcodeproj`) and in `scripts/use-local-sdk.py`. `xcodebuild -resolvePackageDependencies` with an empty cloned-packages directory resolved revision `ec0ac4bb54890b6ac8bb40b4f54ee1ecb1a60012`, the commit behind the public `0.4.0-preview.1` tag, and `Package.resolved` records it.
+
+Between the two pins, `0.3.1-preview.1` accepts public configurations with a pinned key set, and `0.4.0-preview.1` adds tintable icons: `AssetReference` gains an optional `rendering` parameter that defaults to `.original`, so the generated accessors compile unchanged. The demo has no tintable icon and needed no code change.
+
+Checks run with Xcode 27.0 (27A266a), XcodeGen 2.45.4 and XcodeBuildMCP 2.5.2:
+
+1. `xcodegen generate` changed only the package requirement in `project.pbxproj`.
+2. The generated accessors match a fresh offline `generate-catalog.py` run (empty diff).
+3. The CI build command with a new `output/Public040DerivedData` directory fetched the public package (checkout at `ec0ac4b`) and succeeded for the generic iOS Simulator destination with signing disabled. The only warnings were Xcode's AppIntents metadata-skipped notices.
+4. `xcodebuild -project Elsewhere.xcodeproj -scheme Elsewhere -destination 'platform=iOS Simulator,id=…' CODE_SIGNING_ALLOWED=NO build` succeeded for the simulator below.
+5. This repository has no test target, so no unit tests ran here; the SDK's tests live in the SDK repository.
+
+Simulator run from 00:11 to 00:14 ET on the iPhone 18 Pro simulator (iOS 27.0) that the workspace's `e2e/` harness leaves booted. Screenshots were saved to the ignored `output/screenshots/` and are not committed.
+
+- After uninstalling the previous copy, a fresh install launched and showed "Bundled artwork" under both travel cards and "An Assetlib demo · bundled artwork" in the footer.
+- The hosted demo workspace's public configuration (single `pinnedPublicKey` and `keyId`, manifest on the legacy delivery host `assetlib-console.vercel.app`) was written to the app's `assetlib-public-configuration` default with `xcrun simctl spawn … defaults write`. The relaunched app verified signed release 8, the workspace's current release: both travel cards showed "From your workspace · release 8 · WebP 1200×900", the footer showed "Connected to your workspace", and the connection sheet showed "Accepted release 8". **Check for updates** left it at release 8.
+- **Disconnect** returned the cards to "Bundled artwork" and removed the key from the app container's preferences. The value written by `simctl spawn defaults write` sits in the simulator's device-level preferences, which the app also reads and Disconnect does not touch, so it was removed with `defaults delete`; a relaunch then stayed on bundled artwork. This comes from the injection method, not the app.
+
+Not established: a publish and rollback loop against the hosted console, an offline relaunch, VoiceOver, or a physical device. A simulator run is not a device run.
+
 # Local-console end-to-end run — October 9, 2026 (ET)
 
 The workspace's `e2e/` harness (`node e2e/run.mjs`, harness commit `ee93fb8`) ran the golden path against the local console at `http://127.0.0.1:3100` on an iPhone 18 Pro simulator (iOS 27.0, Xcode 27.0), from 20:06 to 20:10 ET (run `20261010T000638Z`). The app was the unsigned Debug simulator build of `7e36eb3` on the pinned Swift SDK `0.3.0-preview.1`; no change to this repository was needed. Maestro 2.11.0 drove the UI; each result below was read by the harness from the UI hierarchy and a screenshot. The report is `e2e/output/20261010T000638Z/report.html` in the workspace (local, not committed).
