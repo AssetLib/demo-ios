@@ -12,6 +12,7 @@ Checks run on macOS with Xcode 27.0 (27A266a), XcodeGen 2.45.4 and XcodeBuildMCP
 2. The generated accessors match a fresh offline `generate-catalog.py` run (empty diff); the previous generator writes the same bytes.
 3. The CI build command with a new derived-data directory fetched the public package (checkout at `b8093e9`) and succeeded for the generic iOS and generic iOS Simulator destinations with signing disabled. The only warnings were Xcode's AppIntents metadata-skipped notices.
 4. This repository has no test target, so no unit tests ran here; the SDK's tests, including the placement membership cases, live in the SDK repository.
+5. CI [run 38185689931](https://github.com/AssetLib/demo-ios/actions/runs/38185689931) on `217637e` passed on `macos-15`: the accessor drift check and the generic iOS Simulator build against the public package.
 
 Not established: no simulator or device run on `0.6.0-preview.1`. The app was not launched, and a card switching to "Bundled artwork" after a Restore to a publication without its placement has not been observed in this app. A compile is not a runtime check.
 
