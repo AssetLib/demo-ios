@@ -1,3 +1,20 @@
+# SDK 0.6.0-preview.1 — October 11, 2026 (ET)
+
+The committed project now pins `https://github.com/AssetLib/sdk-swift.git` at exact version `0.6.0-preview.1` in `project.yml` (and the regenerated `Elsewhere.xcodeproj`) and in `scripts/use-local-sdk.py`. `xcodebuild -resolvePackageDependencies` with an empty cloned-packages directory resolved revision `b8093e905a602c0fdbf2bd32174356089ed0d827`, the commit behind the public `0.6.0-preview.1` tag, and `Package.resolved` records it.
+
+Between the two pins, `0.5.0-preview.1` adds short looping video (`resolveVideo`, `AssetLoopingVideo`), which this demo does not use. `0.6.0-preview.1` implements placement membership: when the latest accepted release does not publish a placement's key, for example after a console Restore of a publication that predates the placement, the SDK returns the bundled image, so that card shows "Bundled artwork" instead of artwork cached from an older release. A size or rendering mismatch and a failed download still fall back to compatible cached artwork. Neither release changes the public API used here, and the app needed no code change.
+
+`scripts/generate-catalog.py` is now the SDK's generator at `0.6.0-preview.1` (unchanged since `0.5.0-preview.1`). The previous copy predated `0.4.0-preview.1`: it accepted a fallback name such as `..` or `.hidden`, which the SDK generator rejects since `0.5.0-preview.1`, and wrote keys and fallback names without Swift string escaping. The new copy also accepts the `rendering` field and namespaced fallback names. This catalog uses none of these, and the old and new generator write byte-identical `Sources/Artwork.generated.swift`.
+
+Checks run on macOS with Xcode 27.0 (27A266a), XcodeGen 2.45.4 and XcodeBuildMCP 2.5.2:
+
+1. `xcodegen generate` changed only the package requirement in `project.pbxproj`.
+2. The generated accessors match a fresh offline `generate-catalog.py` run (empty diff); the previous generator writes the same bytes.
+3. The CI build command with a new derived-data directory fetched the public package (checkout at `b8093e9`) and succeeded for the generic iOS and generic iOS Simulator destinations with signing disabled. The only warnings were Xcode's AppIntents metadata-skipped notices.
+4. This repository has no test target, so no unit tests ran here; the SDK's tests, including the placement membership cases, live in the SDK repository.
+
+Not established: no simulator or device run on `0.6.0-preview.1`. The app was not launched, and a card switching to "Bundled artwork" after a Restore to a publication without its placement has not been observed in this app. A compile is not a runtime check.
+
 # SDK 0.4.0-preview.1 — October 10, 2026 (ET)
 
 The committed project now pins `https://github.com/AssetLib/sdk-swift.git` at exact version `0.4.0-preview.1` in `project.yml` (and the regenerated `Elsewhere.xcodeproj`) and in `scripts/use-local-sdk.py`. `xcodebuild -resolvePackageDependencies` with an empty cloned-packages directory resolved revision `ec0ac4bb54890b6ac8bb40b4f54ee1ecb1a60012`, the commit behind the public `0.4.0-preview.1` tag, and `Package.resolved` records it.
